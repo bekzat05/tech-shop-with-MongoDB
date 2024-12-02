@@ -62,7 +62,7 @@ This project is a backend application designed to manage a product database, han
 
 1. Clone the Repository:
    ```bash
-   git clone https://github.com/your-repository-url.git```
+   git clone https://github.com/your-repository-url.git
    cd your-repository-folder
 2. Set Up MongoDB:
    - Ensure MongoDB is installed and running locally or on a server.
@@ -70,7 +70,7 @@ This project is a backend application designed to manage a product database, han
 3. Build and Run the Application:
    ```bash
    mvn clean install
-   mvn spring-boot:run```
+   mvn spring-boot:run
 4. Access the Application:
    - Swagger UI: ```http://localhost:8080/swagger-ui/index.html```
    - API Endpoints: Use Postman or Curl to interact with the endpoints.
