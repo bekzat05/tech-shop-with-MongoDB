@@ -1,5 +1,6 @@
 package com.dbfinal.prac.services.impl;
 
+import com.dbfinal.prac.dto.UserShowDto;
 import com.dbfinal.prac.exceptions.UserNotFoundException;
 import com.dbfinal.prac.models.User;
 import com.dbfinal.prac.repositories.UserRepository;
@@ -16,39 +17,32 @@ import java.util.List;
 public class UserApiServiceImpl implements UserApiService {
     private final UserRepository userRepository;
 
-    public List<User> getAllUsers() {
+    public List<UserShowDto> getAllUsers() {
         log.info("Finding all users");
         List<User> users = userRepository.findAll();
 
         log.info("Found {} users", users.size());
-        return users;
+        return users.stream().map(this::convertToDto).toList();
     }
 
-    public User getUserById(String id) {
+    public UserShowDto getUserById(String id) {
         log.info("Finding user by id: {}", id);
         User user = userRepository.findById(id).
                 orElseThrow(() -> new UserNotFoundException(id));
 
         log.info("Found user: {}", user);
-        return user;
+        return convertToDto(user);
     }
 
-    public User getUserByName(String name) {
+    public UserShowDto getUserByName(String name) {
         log.info("Finding user by name: {}", name);
         User user = userRepository.findUserByName(name)
                 .orElseThrow(() -> new UserNotFoundException(name));
 
         log.info("Found user: {}", user);
-        return user;
+        return convertToDto(user);
     }
 
-    public User addUser(User user) {
-        log.info("Adding user: {}", user);
-        User createdUser = userRepository.save(user);
-
-        log.info("Added user: {}", createdUser);
-        return createdUser;
-    }
 
     public User update(String id, User updatedUser){
         log.info("Updating user: {}", updatedUser);
@@ -68,5 +62,16 @@ public class UserApiServiceImpl implements UserApiService {
 
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    public UserShowDto convertToDto(User user) {
+        return new UserShowDto(
+                user.getId(),
+                user.getName(),
+                user.getAge(),
+                user.getGender(),
+                user.getEmail(),
+                user.getBalance()
+        );
     }
 }

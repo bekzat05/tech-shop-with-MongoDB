@@ -1,5 +1,6 @@
 package com.dbfinal.prac.controllers;
 
+import com.dbfinal.prac.dto.UserShowDto;
 import com.dbfinal.prac.models.User;
 import com.dbfinal.prac.services.UserApiService;
 import jakarta.validation.Valid;
@@ -21,14 +22,14 @@ public class UserApiController {
 
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserShowDto>> getAllUsers() {
+        List<UserShowDto> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<User> getUserByName(@PathVariable String name) {
-        User user = userService.getUserByName(name);
+    public ResponseEntity<UserShowDto> getUserByName(@PathVariable String name) {
+        UserShowDto user = userService.getUserByName(name);
         if(user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
@@ -37,28 +38,23 @@ public class UserApiController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser() {
+    public ResponseEntity<UserShowDto> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
+        UserShowDto userDto = userService.convertToDto(currentUser);
 
-        return ResponseEntity.ok(currentUser);
+        return ResponseEntity.ok(userDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<UserShowDto> getUserById(@PathVariable String id) {
+        UserShowDto user = userService.getUserById(id);
         if(user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
-        User createdUser = userService.addUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
@@ -73,7 +69,7 @@ public class UserApiController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
-        User user = userService.getUserById(id);
+        UserShowDto user = userService.getUserById(id);
         if (user != null) {
             userService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
