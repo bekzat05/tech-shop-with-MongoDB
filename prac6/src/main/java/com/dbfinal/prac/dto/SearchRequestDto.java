@@ -1,5 +1,11 @@
 package com.dbfinal.prac.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.AccessType;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchRequestDto {
 
     private String keyword;

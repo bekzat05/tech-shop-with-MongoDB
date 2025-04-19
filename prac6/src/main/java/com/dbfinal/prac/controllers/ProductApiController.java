@@ -94,17 +94,6 @@ public class ProductApiController {
         return ResponseEntity.ok(likedProducts);
     }
 
-    @GetMapping("/recommendations/{userId}")
-    public ResponseEntity<List<ProductShowDto>> getRecommendations(@PathVariable String userId) {
-        List<ProductShowDto> recommendations = productService.getRecommendedProducts(userId);
-        return ResponseEntity.ok(recommendations);
-    }
-
-    @GetMapping("/collaborations")
-    public ResponseEntity<List<ProductShowDto>> getCollaborations() {
-        List<ProductShowDto> collaborations = productService.getCollaborations();
-        return ResponseEntity.ok(collaborations);
-    }
 
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getAllCategories() {
